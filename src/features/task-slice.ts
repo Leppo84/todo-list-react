@@ -1,5 +1,6 @@
 // ducks pattern
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { useAppSelector } from "../app/hooks";
 
 interface Task {
   taskId: number;
@@ -7,15 +8,6 @@ interface Task {
   content: string;
 };
 
-const newId = 2;
-const ifcompleted = false;
-const addingContent = "Nuovo Todo"
-
-const newTask: Task = {
-  taskId: newId,
-  completed: ifcompleted,
-  content: addingContent
-}
 
 export const taskSlice = createSlice({
   name: 'taskManager',
@@ -31,27 +23,37 @@ export const taskSlice = createSlice({
     },
   ],
   reducers: {
+    // getTask
+    listedTask(state) {
+      return state
+    },
     // addTask
     addedTask(state) {
-      state = [...state, newTask]
+      let counter = state.length
+      const newId = counter;
+      const ifcompleted = false;
+      const addingContent = "Nuovo Todo"
+      const newTask: Task = {
+        taskId: newId,
+        completed: ifcompleted,
+        content: addingContent
+      }
+      state = [...state, newTask];
+      return state
     },
-    // getTask
-    // listedTask(state) {
-    //   return state
-    // },
     // modifyTask
     // updatedTask(state) {
-    //   return state
-    // },
-    // deleteTask
-    // deletedTask(state) {
-    //   return state
-    // },
-
-  }
+      //   return state
+      // },
+      // deleteTask
+      // deletedTask(state) {
+        //   return state
+        // },
+        
+      }
 });
 // console.log("userAdded");
 
-export const { addedTask } = taskSlice.actions
+export const { addedTask, listedTask } = taskSlice.actions
 export default taskSlice.reducer
 

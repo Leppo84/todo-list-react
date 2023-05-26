@@ -3,6 +3,7 @@ import { useAppDispatch, useAppSelector}  from './app/hooks'
 import { addedTask } from './features/task-slice'
 import './App.css';
 import './css/style-temp.css'
+import { useSelector } from 'react-redux';
 
 
 const deleteRow = () => {
@@ -14,13 +15,14 @@ const deleteRow = () => {
   function App() {
     
     const taskText = useAppSelector((state) => state.taskManager[1].content)
-    
+    const tasks = useAppSelector(state => state.taskManager);
+
     const dispatch = useAppDispatch();
     
     function AddTask () {
       dispatch(addedTask());
-      // return (
-      // console.log('Task Added'))
+      return (
+      console.log('Task Added'))
     }
 
     return (
@@ -40,14 +42,16 @@ const deleteRow = () => {
           </section>
           <section className="board tasks">
               <div> 
-                {/* <div className="arrow"></div> */}
                 <h3>Cose da fare:</h3>
-                <div className="line" key="">
+                {tasks.map(task => 
+                <div className="line" key={task.taskId}>
+
                     <div className="X">
-                      <h5 className="todo">{taskText}</h5>
+                      <h5 className="todo">{task.content}</h5>
                     </div>
                     <button onClick={deleteRow}> X </button>
                 </div>
+                )}         
               </div>
           </section>
       </main>
