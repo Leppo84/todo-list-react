@@ -1,60 +1,20 @@
-import React from 'react';
-import { useAppDispatch, useAppSelector}  from './app/hooks'
-import { addedTask } from './features/task-slice'
 import './App.css';
-import './css/style-temp.css'
-import { useSelector } from 'react-redux';
+// import './css/style-temp.css';
+import '@fontsource/roboto/300.css';
+import '@fontsource/roboto/400.css';
+import '@fontsource/roboto/500.css';
+import '@fontsource/roboto/700.css';
+import { TodoList } from './components/TodoList';
+import { Header } from './components/Header';
 
+function App() {
 
-const deleteRow = () => {
   return (
-    console.log('pressed delete')
-    )
-  }
-  
-  function App() {
-    
-    const taskText = useAppSelector((state) => state.taskManager[1].content)
-    const tasks = useAppSelector(state => state.taskManager);
-
-    const dispatch = useAppDispatch();
-    
-    function AddTask () {
-      dispatch(addedTask());
-      return (
-      console.log('Task Added'))
-    }
-
-    return (
-      <div className="App">
-      <header className="">
-          <div className="container">
-              {/* <img className="bg-black" src="assets/Logo FL bianco.webp" alt="LOGO"/> */}
-              <span className="logotype">To Do list</span>
-          </div> 
-      </header>
-      <main>
-          <section className="board actionbar">
-              <input type="text" placeholder="Inserisci una nuova nota"/>
-              <button id="active"
-              onClick={() => AddTask()}
-              >Aggiungi</button>
-          </section>
-          <section className="board tasks">
-              <div> 
-                <h3>Cose da fare:</h3>
-                {tasks.map(task => 
-                <div className="line" key={task.taskId}>
-
-                    <div className="X">
-                      <h5 className="todo">{task.content}</h5>
-                    </div>
-                    <button onClick={deleteRow}> X </button>
-                </div>
-                )}         
-              </div>
-          </section>
-      </main>
+    <div className="App">
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"/>
+      <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons"/>
+      <Header></Header>
+      <TodoList></TodoList>
     </div>
   );
 }

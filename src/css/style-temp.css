@@ -11,6 +11,11 @@ body {
 
 /* header */
 
+.text-cener{
+  text-align: center;
+}
+
+
 .container {
   display:flex;
   align-items: center;
@@ -41,6 +46,7 @@ header {
   margin-right:  auto;
   margin-bottom: 2px;
   padding: 12px 50px;
+  border-radius: 12px;
 }
 
 .actionbar {
@@ -48,15 +54,6 @@ header {
   border-bottom: 2px solid rgb(210, 210, 210);
   border-top-left-radius: 12px;
   border-top-right-radius: 12px;
-}
-
-.tasks {
-  border-bottom-left-radius: 12px;
-  border-bottom-right-radius: 12px;
-  padding-top: 6px;
-  padding-bottom: 20px;
-  margin-bottom: 20px;
-  border-bottom: 3px solid rgb(210, 210, 210);
 }
 
 main {

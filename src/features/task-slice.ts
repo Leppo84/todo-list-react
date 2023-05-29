@@ -1,13 +1,14 @@
 // ducks pattern
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { useAppSelector } from "../app/hooks";
+import { useAppDispatch, useAppSelector } from "../app/hooks";
 
-interface Task {
+export interface Task {
   taskId: number;
   completed: boolean;
   content: string;
 };
 
+let counter= 2
 
 export const taskSlice = createSlice({
   name: 'taskManager',
@@ -21,39 +22,41 @@ export const taskSlice = createSlice({
       completed: false,
       content: "Chiama il dottore",
     },
-  ],
+  ] as Task[],
   reducers: {
     // getTask
     listedTask(state) {
       return state
     },
+
     // addTask
-    addedTask(state) {
-      let counter = state.length
-      const newId = counter;
-      const ifcompleted = false;
-      const addingContent = "Nuovo Todo"
+    addedTask(state, actions: PayloadAction<string>) {
       const newTask: Task = {
-        taskId: newId,
-        completed: ifcompleted,
-        content: addingContent
-      }
-      state = [...state, newTask];
-      return state
+        taskId: counter,
+        completed: false,
+        content: actions.payload
+      };
+      counter++;
+      state.push(newTask);
     },
+    
     // modifyTask
-    // updatedTask(state) {
-      //   return state
-      // },
-      // deleteTask
-      // deletedTask(state) {
-        //   return state
-        // },
-        
+    updatedTask(state, action: PayloadAction<{ taskId: number; newContent: string }>) {
+      return state.map(task => {
+        if (task.taskId === action.payload.taskId) {
+          return {...task, content: action.payload.newContent};
+        }
+        return task;
+      });
+    },
+    
+    // deleteTask
+    deletedTask(state, action: PayloadAction<number>) {
+      return state = state.filter(task => task.taskId !== action.payload)
+        }
       }
 });
-// console.log("userAdded");
 
-export const { addedTask, listedTask } = taskSlice.actions
+export const { addedTask, listedTask, deletedTask, updatedTask } = taskSlice.actions
 export default taskSlice.reducer
 
