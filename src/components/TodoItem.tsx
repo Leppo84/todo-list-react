@@ -4,6 +4,7 @@ import { Task, addedTask, deletedTask, updatedTask } from '../features/task-slic
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import { useAppDispatch } from '../app/hooks';
+import { cyan } from '@mui/material/colors';
 
 interface TodoItemProps {
   task: Task;
@@ -29,7 +30,7 @@ const TodoItem: React.FC<TodoItemProps> = ({
       dispatch(updatedTask({ taskId: editTaskId, newContent: content }));
       setEditTaskId(null);
     } else {
-      dispatch(addedTask(content));
+      dispatch(addedTask(task.content));
     }
     setContent("");
   };
@@ -47,7 +48,7 @@ const TodoItem: React.FC<TodoItemProps> = ({
   };
   
   return (
-    <Stack direction="row" spacing={12} alignItems='center' mt={4}>
+    <Stack direction="row" spacing={1} alignItems='center' mt={4}>
       {task.completed ?
         <CheckCircleOutlineIcon color='success'/> : <HighlightOffIcon color='action'/>}
         <ListItem>{task.content}</ListItem>
@@ -55,25 +56,27 @@ const TodoItem: React.FC<TodoItemProps> = ({
       {editTaskId === task.taskId ? (
 
   
-        <form onSubmit={handleFormSubmit}>
-          <TextField hiddenLabel
-            id="filled-hidden-label-small"
-            defaultValue="Small"
-            variant="filled"
-            size="small"
-            type="text"
-            placeholder="Modifica il task"
-            value={content}
-            onChange={handleContentChange}
-          />
-          <Button variant='contained' type="submit">Salva</Button>
-        </form>
+        <ListItem>
+          <form onSubmit={handleFormSubmit}>
+            <TextField hiddenLabel
+              id="filled-hidden-label-small"
+              defaultValue="Small"
+              variant="filled"
+              size="small"
+              type="text"
+              placeholder="Modifica il task"
+              value={content}
+              onChange={handleContentChange}
+            />
+            <Button variant='contained' type="submit">Salva</Button>
+          </form>
+        </ListItem>
       ) : (
         <>
-          <Button variant='outlined' onClick={() => handleEditClick(task.taskId)}>Modifica</Button>
+          <Button variant='outlined' color='secondary' onClick={() => handleEditClick(task.taskId)}>Modifica</Button>
+          <Button variant='contained' color='error' onClick={() => handleDeleteClick(task.taskId)}>Cancella</Button>
         </>
       )}
-      <Button variant='contained' color='error' onClick={() => handleDeleteClick(task.taskId)}>Cancella</Button>
     </Stack>
   );
 };

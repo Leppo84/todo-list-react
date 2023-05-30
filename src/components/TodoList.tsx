@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useAppDispatch, useAppSelector } from '../app/hooks';
-import { Box, Button, Container, TextField } from '@mui/material';
+import { Box, Button, Container, TextField, Typography } from '@mui/material';
 import { useTheme } from '@emotion/react';
 import { addedTask, updatedTask } from '../features/task-slice';
 import TodoItem from './TodoItem';
@@ -35,11 +35,10 @@ const handleContentChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 const [content, setContent] = React.useState('');
 
 
-    return (
-      <Box bgcolor={'lightgrey'} height={'100vh'}>
-        <Container fixed>
-          <Box bgcolor={'white'} borderRadius={5} mt={5} p={3}>
-            <h3>Cose da fare:</h3>
+  return (
+
+        <Box bgcolor={'white'} borderRadius={5} p={4} mt={2}>
+          <Typography variant='h3'>Cose da fare:</Typography>
             {tasks.map((task) => (
               <TodoItem
                 key={task.taskId}
@@ -63,8 +62,6 @@ const [content, setContent] = React.useState('');
               Aggiungi nuova nota
             </Button>
           </form> }
-          </Box>
-        </Container>
-      </Box>
-    )
+        </Box>
+  )
 }

@@ -1,9 +1,30 @@
+import { AppBar, Typography } from "@mui/material"
+
+declare module '@mui/material/styles' {
+  interface TypographyVariants {
+    title: React.CSSProperties;
+  }
+
+  // allow configuration using `createTheme`
+  interface TypographyVariantsOptions {
+    title?: React.CSSProperties;
+  }
+}
+
+// Update the Typography's variant prop options
+declare module '@mui/material/Typography' {
+  interface TypographyPropsVariantOverrides {
+    title: true;
+  }
+}
+
 export const Header = () => {
 return(
-<header>
-<h1>
-  To Do list
-</h1>
-</header>
+
+  <AppBar position="static" color="secondary">
+    <Typography variant="title">
+      To Do list
+    </Typography>
+  </AppBar>
 )
 }

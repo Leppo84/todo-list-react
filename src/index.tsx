@@ -14,10 +14,10 @@ const root = ReactDOM.createRoot(
 root.render(
 
   // <React.StrictMode>
-  <ThemeProvider theme={myFirstTheme}>
-    <Provider store={store}>
-      <App />
-    </Provider>
-  </ThemeProvider>
+    <ThemeProvider theme={myFirstTheme}>
+      <Provider store={store}>
+        <App />
+      </Provider>
+    </ThemeProvider>
   // </React.StrictMode>
 );
