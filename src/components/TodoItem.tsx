@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Box, Button, Container, ListItem, Paper, Stack, TextField } from '@mui/material';
+import { Box, Button, Container, Divider, ListItem, Paper, Stack, TextField } from '@mui/material';
 import { Task, addedTask, deletedTask, updatedTask } from '../features/task-slice';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
@@ -21,8 +21,7 @@ const TodoItem: React.FC<TodoItemProps> = ({ task }) => {
   return (
     <ListItem>
       <Container>
-
-        <Stack direction="row" spacing={2} alignItems='center' justifyContent="flex-start" mt={4}>
+        <Stack direction="row" spacing={2} alignItems='center' justifyContent="flex-start" mt={1}>
           {task.completed ? (
             <CheckCircleOutlineIcon color='success'/>
             ) : (
@@ -34,7 +33,7 @@ const TodoItem: React.FC<TodoItemProps> = ({ task }) => {
         </Stack>
       </Container>
       <Container>
-        <Stack direction="row" spacing={2} alignItems='center' justifyContent="flex-end" mt={4}>
+        <Stack direction="row" spacing={2} alignItems='center' justifyContent="flex-end" mt={1}>
           <TodoEdit
             task={task}
             />

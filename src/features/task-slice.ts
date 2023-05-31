@@ -1,6 +1,7 @@
 // ducks pattern
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
+import { Task } from "@mui/icons-material";
 
 export interface Task {
   taskId: number;
@@ -20,17 +21,25 @@ export const taskSlice = createSlice({
     },  {
       taskId: 1,
       completed: false,
-      content: "Chiama il dottore",
-    },
-  ] as Task[],
+      content: "Prova a mettere una nuova nota",
+    },] as Task[],  
   reducers: {
-    // getTask
-    listedTask(state) {
-    //   const newItems = JSON.stringify(newTask)
-    //   localStorage.setItem("myItems",newItems);
-
-      return state
+    // SaveTasks into local storage
+    savedTask(state) {
+      const currentData = JSON.stringify(state);
+      localStorage.setItem("currentData", (currentData));
     },
+
+    // loadTasks from local storage
+    loadedTask(state) {
+      const storageData: string | null = localStorage.getItem("currentData");      
+      const jsonData: Task[] = JSON.parse(storageData!);
+      console.log("da storage",storageData);        
+      console.log("parsato",jsonData);
+      // state.push(newTask);
+      return jsonData
+    },
+
 
     // addTask
     addedTask(state, actions: PayloadAction<string>) {
@@ -42,9 +51,8 @@ export const taskSlice = createSlice({
       counter++;
       state.push(newTask);
 
-    
-      const newItems = JSON.stringify(newTask)
-      localStorage.setItem("myItems",newItems);
+      // const newItems = JSON.stringify(newTask)
+      // localStorage.setItem("myItems",newItems);
 
     },
     
@@ -67,6 +75,6 @@ export const taskSlice = createSlice({
       }
 });
 
-export const { addedTask, listedTask, deletedTask, updatedTask } = taskSlice.actions
+export const { addedTask, savedTask,loadedTask, deletedTask, updatedTask } = taskSlice.actions
 export default taskSlice.reducer
 
