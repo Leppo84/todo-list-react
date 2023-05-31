@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { useAppDispatch, useAppSelector } from '../app/hooks';
-import { Box, Button, Container, TextField, Typography } from '@mui/material';
+import { Box, Button, TextField, Typography } from '@mui/material';
 import { useTheme } from '@emotion/react';
-import { addedTask, updatedTask } from '../features/task-slice';
+import { Task, addedTask, updatedTask } from '../features/task-slice';
 import TodoItem from './TodoItem';
 
 export const TodoList = () => {
@@ -37,28 +37,31 @@ const [content, setContent] = React.useState('');
 
   return (
 
-        <Box bgcolor={'white'} borderRadius={5} p={4} mt={2}>
+        <Box bgcolor={'white'} borderRadius={5} py={3} px={6} mt={2} sx={{boxShadow:8}}>
           <Typography variant='h3'>Cose da fare:</Typography>
+          <hr />
             {tasks.map((task) => (
               <TodoItem
                 key={task.taskId}
                 task={task}
-                editTaskId={editTaskId}
               />
             ))}
+          <br />
+          <hr />
+          <br />
             {editTaskId !== null ? null : 
           <form onSubmit={handleSubmit}>
             <TextField hiddenLabel
+              variant="filled"
               id="filled-hidden-label-small"
               defaultValue="Small"
-              variant="filled"
               size="small"
               type="text"
               placeholder="Inserisci una nota"
               value={content}
               onChange={handleContentChange}
               />
-            <Button variant='contained' id="active" type="submit">
+            <Button variant='contained'sx={{mx:2}} id="active" type="submit">
               Aggiungi nuova nota
             </Button>
           </form> }

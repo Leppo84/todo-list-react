@@ -6,6 +6,7 @@ import '@fontsource/roboto/700.css';
 import { TodoList } from './components/TodoList';
 import { Header } from './components/Header';
 import { Box, Container } from '@mui/material';
+import Footer from './components/Footer';
 
 function App() {
 
@@ -13,12 +14,13 @@ function App() {
     <div className="App">
       <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"/>
       <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons"/>
-      <Box bgcolor={'lightgrey'} height={'100vh'}>
-      <Header></Header>
-      <Container>
-      <TodoList></TodoList>
-      </Container>
-    </Box>
+      <Box bgcolor={'lightgrey'} minHeight={'92vh'}>
+        <Header/>
+        <Container>
+          <TodoList/>
+        </Container>
+      </Box>
+      <Footer/>
     </div>
   );
 }
