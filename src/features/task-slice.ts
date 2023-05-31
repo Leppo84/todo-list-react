@@ -26,6 +26,9 @@ export const taskSlice = createSlice({
   reducers: {
     // getTask
     listedTask(state) {
+    //   const newItems = JSON.stringify(newTask)
+    //   localStorage.setItem("myItems",newItems);
+
       return state
     },
 
@@ -38,12 +41,19 @@ export const taskSlice = createSlice({
       };
       counter++;
       state.push(newTask);
+
+    
+      const newItems = JSON.stringify(newTask)
+      localStorage.setItem("myItems",newItems);
+
     },
     
     // modifyTask
     updatedTask(state, action: PayloadAction<{ taskId: number; newContent: string }>) {
       return state.map(task => {
+        console.log('pippo qui');
         if (task.taskId === action.payload.taskId) {
+          
           return {...task, content: action.payload.newContent};
         }
         return task;

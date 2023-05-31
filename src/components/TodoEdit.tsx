@@ -17,7 +17,7 @@ const TodoEdit: React.FC<TodoEditProps> = ({ task }) => {
 
   const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (task.taskId) {
+    if (task.taskId != null) {
       dispatch(updatedTask({ taskId: task.taskId, newContent: content }));
     } else {
       dispatch(addedTask(content));
@@ -36,35 +36,33 @@ const TodoEdit: React.FC<TodoEditProps> = ({ task }) => {
   };
 
   return (
-    <ListItem>
-        {editTaskId === task.taskId ? (
-
-    <form onSubmit={handleFormSubmit}>
-      <TextField 
-        hiddenLabel
-        id="filled-hidden-label-small"
-        defaultValue="Small"
-        variant="filled"
-        size="small"
-        type="text"
-        placeholder="Modifica il task"
-        value={content}
-        onChange={handleContentChange}
-      />
-      <Button variant='contained' sx={{mx:2}} type="submit">Salva</Button>
-    </form>
-        ) : (
-      <Button 
-      variant='outlined'
-      color='secondary'
-      sx={{':hover': {bgcolor: 'darkblue', color:'white'}}} onClick={() => handleEditClick(task.taskId)}
-      >
-      Modifica
-      </Button>
+    <>
+      {editTaskId === task.taskId ? (
+        <form onSubmit={handleFormSubmit}>
+          <TextField 
+            hiddenLabel
+            id="filled-hidden-label-small"
+            defaultValue="Small"
+            variant="filled"
+            size="small"
+            type="text"
+            placeholder="Modifica il task"
+            value={content}
+            onChange={handleContentChange}
+          />
+          <Button variant='contained' sx={{mx:2}} type="submit">Salva</Button>
+        </form>
+      ) : (
+        <Button 
+        variant='outlined'
+        color='secondary'
+        sx={{':hover': {bgcolor: 'darkblue', color:'white'}}} onClick={() => handleEditClick(task.taskId)}
+        >
+        Modifica
+        </Button>
       )}
-
-  </ListItem>
-  )
+    </>
+    )
 }
 
 export default TodoEdit
