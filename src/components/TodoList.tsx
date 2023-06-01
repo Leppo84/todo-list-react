@@ -1,15 +1,16 @@
 import * as React from 'react';
 import { useAppDispatch, useAppSelector } from '../app/hooks';
-import { Box, Button, Chip, Divider, List, ListItem, TextField, Typography } from '@mui/material';
+import { Box, Button, Chip, List, TextField, Typography } from '@mui/material';
 import { useTheme } from '@emotion/react';
-import { loadedTask, addedTask, savedTask, updatedTask, Task } from '../features/task-slice';
+import { Task, loadedTask, addedTask, savedTask, updatedTask, checkTask } from '../features/task-slice';
 import TodoItem from './TodoItem';
+import TodoEmpty from './TodoEmpty';
+
 
 export const TodoList = () => {
   const theme = useTheme();
   
   const tasks: Task[] = useAppSelector((state) => state.taskManager);
-  console.log("sono i tasks",tasks);
   
   const dispatch = useAppDispatch();
   
@@ -43,21 +44,25 @@ export const TodoList = () => {
   const loadTask = (() => {
     dispatch(loadedTask());
     console.log("Pigiato l'altro  buttun");
+    dispatch(checkTask());
   }); 
 
-
   return (
-
         <Box bgcolor={'white'} borderRadius={5} py={3} px={6} mt={2} sx={{boxShadow:8}}>
           <Typography variant='h3'>Cose da fare:</Typography>
           <hr />
           <List>
-            {tasks.map((task) => (
+            {tasks.length > 0 ? (
+            tasks.map((task: Task) => (
               <TodoItem
                 key={task.taskId}
                 task={task}
               />
-            ))}
+            )))
+            :
+            (
+              <TodoEmpty/>
+            )}
           </List>
           <hr />
           <br />
@@ -83,7 +88,6 @@ export const TodoList = () => {
 
               onClick={loadTask}
             />
-
           </form> }
         </Box>
   )

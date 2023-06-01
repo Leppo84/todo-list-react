@@ -1,7 +1,7 @@
 // ducks pattern
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { useAppDispatch, useAppSelector } from "../app/hooks";
 import { Task } from "@mui/icons-material";
+import { useState } from "react";
 
 export interface Task {
   taskId: number;
@@ -9,60 +9,50 @@ export interface Task {
   content: string;
 };
 
-let counter= 2
+let counter: number = 1
+
+const storageData: string | null = localStorage.getItem("currentData");      
+const jsonData: Task[] = JSON.parse(storageData!);
 
 export const taskSlice = createSlice({
   name: 'taskManager',
-  initialState: [
-    {
-      taskId: 0,
-      completed: true,
-      content: "Carica i dati",
-    },  {
-      taskId: 1,
-      completed: false,
-      content: "Prova a mettere una nuova nota",
-    },] as Task[],  
+  initialState: jsonData as Task[],  
   reducers: {
+
     // SaveTasks into local storage
     savedTask(state) {
       const currentData = JSON.stringify(state);
       localStorage.setItem("currentData", (currentData));
     },
-
+    
     // loadTasks from local storage
     loadedTask(state) {
       const storageData: string | null = localStorage.getItem("currentData");      
       const jsonData: Task[] = JSON.parse(storageData!);
-      console.log("da storage",storageData);        
-      console.log("parsato",jsonData);
-      // state.push(newTask);
       return jsonData
     },
-
-
+    
     // addTask
     addedTask(state, actions: PayloadAction<string>) {
+      counter = 1
+      if (state.length > 0) {
+        counter = state[state.length -1].taskId +1;
+      }
       const newTask: Task = {
         taskId: counter,
         completed: false,
         content: actions.payload
       };
-      counter++;
       state.push(newTask);
-
-      // const newItems = JSON.stringify(newTask)
-      // localStorage.setItem("myItems",newItems);
-
     },
-    
+      
     // modifyTask
     updatedTask(state, action: PayloadAction<{ taskId: number; newContent: string }>) {
       return state.map(task => {
-        console.log('pippo qui');
         if (task.taskId === action.payload.taskId) {
           
-          return {...task, content: action.payload.newContent};
+        // const [content, setContent] = React.useState('');
+        return {...task, content: action.payload.newContent};
         }
         return task;
       });
@@ -71,10 +61,44 @@ export const taskSlice = createSlice({
     // deleteTask
     deletedTask(state, action: PayloadAction<number>) {
       return state = state.filter(task => task.taskId !== action.payload)
+    },
+    
+    // toggle done/undone
+    toggledStatusTask (state, action: PayloadAction<number>) {
+      console.log(action.payload);
+      return state.map(task => {
+        let status: boolean = task.completed;
+        status = !status
+        if (task.taskId === action.payload) {
+          return {...task, completed: status}
         }
+        return task;
+      })
+    },
+
+    // alert to save modifications
+    checkTask (state) {
+      // let flatState: string = JSON.stringify(state);
+      // let jsonState: any = JSON.parse(state);
+      // const objectsEqual = (o1: Task | Task[] | null, o2: Task | Task[] | null): boolean => {
+      //   console.log("Dati nello storage: ", jsonData);
+      //   console.log("Dati nello state: ",state);
+      //   console.log("State stringhifato",flatState);
+        
+      //   if (o2 === null && o1 !== null) return false;
+      //   if (Array.isArray(o1) && Array.isArray(o2) && o1.length === o2.length) {
+      //     return o1.every((item, index) => objectsEqual(item, o2[index]));
+      //   }
+      //   return o1 === o2;    
+      // }
+      // objectsEqual(jsonData,state)?
+      //   console.log("I Json sono uguali")
+      // :
+      //   console.log("I Json sono diversi");
+       return state;
       }
+    }
 });
 
-export const { addedTask, savedTask,loadedTask, deletedTask, updatedTask } = taskSlice.actions
+export const { addedTask, savedTask,loadedTask, deletedTask, updatedTask, toggledStatusTask, checkTask } = taskSlice.actions
 export default taskSlice.reducer
-

@@ -1,10 +1,11 @@
 import * as React from 'react';
-import { Box, Button, Container, Divider, ListItem, Paper, Stack, TextField } from '@mui/material';
-import { Task, addedTask, deletedTask, updatedTask } from '../features/task-slice';
+import { Box, Button, Chip, Container, ListItem, Paper, Stack } from '@mui/material';
+import { Task, deletedTask, toggledStatusTask } from '../features/task-slice';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import { useAppDispatch } from '../app/hooks';
 import TodoEdit from './TodoEdit';
+import { green, grey, red } from '@mui/material/colors';
 
 interface TodoItemProps {
   task: Task;
@@ -18,35 +19,52 @@ const TodoItem: React.FC<TodoItemProps> = ({ task }) => {
     dispatch(deletedTask(taskId));
   };
   
+  const toggleStatus = (targetTask: number) => {
+    dispatch(toggledStatusTask(targetTask));
+    console.log("toggle called, task: ",task);
+  }
+
   return (
-    <ListItem>
       <Container>
-        <Stack direction="row" spacing={2} alignItems='center' justifyContent="flex-start" mt={1}>
-          {task.completed ? (
-            <CheckCircleOutlineIcon color='success'/>
-            ) : (
-              <HighlightOffIcon color='action'/>
-              )}
-            <Paper elevation={3} sx={{py:1, px:3}}>
+        <Stack direction="row" spacing={2} alignItems='center' justifyContent="space-between" mt={1} useFlexGap>
+          <Stack direction="row" spacing={2} alignItems='center' justifyContent="space-between" mt={1} p={1}
+            onClick={() => toggleStatus(task.taskId)}
+            >
+        {task.completed ? (
+          <>
+            <Chip label="Done!" sx={{boxShadow:1}} variant='outlined'></Chip>
+            <CheckCircleOutlineIcon color='success'/> 
+            <Paper elevation={1} sx={{py:1, px:3, bgcolor:green[50], color:grey[600]}}
+              >
               {task.content}
             </Paper>
+          </>
+            ) : (
+              <>
+          
+            <Chip label="To do" sx={{boxShadow:3}}></Chip>      
+            <HighlightOffIcon color='error'/>
+            <Paper elevation={3} sx={{py:1, px:3, bgcolor:red[50]}}
+              >
+              {task.content}
+            </Paper>
+            </>
+        )}
+          </Stack>
+          <Stack direction="row" spacing={2} alignItems='center' justifyContent="space-between" mt={1}>
+            <TodoEdit
+              task={task}
+              />
+            <Button
+              variant='contained'
+              color='error'
+              onClick={() => handleDeleteClick(task.taskId)}
+              >
+              Cancella
+            </Button>
+          </Stack>
         </Stack>
       </Container>
-      <Container>
-        <Stack direction="row" spacing={2} alignItems='center' justifyContent="flex-end" mt={1}>
-          <TodoEdit
-            task={task}
-            />
-          <Button
-            variant='contained'
-            color='error'
-            onClick={() => handleDeleteClick(task.taskId)}
-            >
-            Cancella
-          </Button>
-        </Stack>
-      </Container>
-    </ListItem>
   );
 };
 
