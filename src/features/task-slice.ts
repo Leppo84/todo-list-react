@@ -1,6 +1,7 @@
 // ducks pattern
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { Task } from "@mui/icons-material";
+import isEqual from "lodash.isequal";
 import { useState } from "react";
 
 export interface Task {
@@ -9,10 +10,10 @@ export interface Task {
   content: string;
 };
 
-let counter: number = 1
-
 const storageData: string | null = localStorage.getItem("currentData");      
 const jsonData: Task[] = JSON.parse(storageData!);
+
+let counter = 1;
 
 export const taskSlice = createSlice({
   name: 'taskManager',
@@ -33,7 +34,7 @@ export const taskSlice = createSlice({
     },
     
     // addTask
-    addedTask(state, actions: PayloadAction<string>) {
+    addedTask(state, action: PayloadAction<string>) {
       counter = 1
       if (state.length > 0) {
         counter = state[state.length -1].taskId +1;
@@ -41,7 +42,7 @@ export const taskSlice = createSlice({
       const newTask: Task = {
         taskId: counter,
         completed: false,
-        content: actions.payload
+        content: action.payload
       };
       state.push(newTask);
     },
@@ -77,7 +78,7 @@ export const taskSlice = createSlice({
     },
 
     // alert to save modifications
-    checkTask (state) {
+      
       // let flatState: string = JSON.stringify(state);
       // let jsonState: any = JSON.parse(state);
       // const objectsEqual = (o1: Task | Task[] | null, o2: Task | Task[] | null): boolean => {
@@ -95,10 +96,10 @@ export const taskSlice = createSlice({
       //   console.log("I Json sono uguali")
       // :
       //   console.log("I Json sono diversi");
-       return state;
-      }
+      //  return state;
+      // }
     }
 });
 
-export const { addedTask, savedTask,loadedTask, deletedTask, updatedTask, toggledStatusTask, checkTask } = taskSlice.actions
+export const { addedTask, savedTask,loadedTask, deletedTask, updatedTask, toggledStatusTask } = taskSlice.actions
 export default taskSlice.reducer

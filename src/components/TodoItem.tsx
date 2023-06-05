@@ -21,7 +21,6 @@ const TodoItem: React.FC<TodoItemProps> = ({ task }) => {
   
   const toggleStatus = (targetTask: number) => {
     dispatch(toggledStatusTask(targetTask));
-    console.log("toggle called, task: ",task);
   }
 
   return (

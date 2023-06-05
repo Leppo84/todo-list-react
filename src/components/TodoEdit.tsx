@@ -25,7 +25,7 @@ const TodoEdit: React.FC<TodoEditProps> = ({ task }) => {
     setContent("");
     setEditTaskId(null);
   };
-
+  
   const handleEditClick = (taskId: number) => {
     setEditTaskId(taskId);
     setContent(task.content);
@@ -62,7 +62,7 @@ const TodoEdit: React.FC<TodoEditProps> = ({ task }) => {
         </Button>
       )}
     </>
-    )
+  )
 }
 
 export default TodoEdit
