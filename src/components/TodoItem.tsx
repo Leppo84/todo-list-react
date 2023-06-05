@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Box, Button, Chip, Container, ListItem, Paper, Stack } from '@mui/material';
+import { Button, Chip, Container, Paper, Stack } from '@mui/material';
 import { Task, deletedTask, toggledStatusTask } from '../features/task-slice';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
