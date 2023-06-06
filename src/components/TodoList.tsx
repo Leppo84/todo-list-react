@@ -3,11 +3,14 @@ import { useMemo } from 'react';
 import { useAppDispatch, useAppSelector } from '../app/hooks';
 import { Box, Button, Chip, List, TextField, Typography } from '@mui/material';
 import { useTheme } from '@emotion/react';
-import { Task, loadedTask, addedTask, savedTask, updatedTask } from '../features/task-slice';
+import taskSlice, { Task, loadedTask, addedTask, savedTask, updatedTask } from '../features/task-slice';
 import TodoItem from './TodoItem';
 import TodoEmpty from './TodoEmpty';
 import isEqual from 'lodash.isequal';
 
+import { DndContext, closestCenter } from '@dnd-kit/core';
+import { arrayMove, SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
+import { useState } from 'react';
 
 export const TodoList = () => {
   const theme = useTheme();
@@ -66,6 +69,7 @@ export const TodoList = () => {
 
   // DRAG & DROP FEATURE
 
+  const [ order, setOrder ] = useState(tasks);
   
 
   
@@ -73,19 +77,26 @@ export const TodoList = () => {
     <Box bgcolor={'white'} borderRadius={5} py={3} px={6} mt={2} sx={{boxShadow:8}}>
           <Typography variant='h3'>Cose da fare:</Typography>
           <hr />
-          <List>
-            {tasks.length > 0 ? (
-              tasks.map((task: Task) => (
-                <TodoItem
-                key={task.taskId}
-                task={task}
-                />
-                )))
-            :
-            (
-              <TodoEmpty/>
-            )}
-          </List>
+          <DndContext
+            collisionDetection={closestCenter}
+            onDragEnd={handleDragEnd}
+          >
+            {/* <SortableContext
+              // items = {order.taskId}
+              strategy={verticalListSortingStrategy}
+            > */}
+              {tasks && tasks.length > 0 ? (
+                tasks.map((task: Task) => (
+                  <TodoItem
+                  key={task.taskId}
+                  task={task}
+                  />
+                  ))
+              ):(
+                <TodoEmpty/>
+              )}
+            {/* </SortableContext> */}
+          </DndContext>
           <hr />
           <br />
             {editTaskId !== null ? null : 
@@ -118,5 +129,11 @@ export const TodoList = () => {
             )}
           </form> }
         </Box>
-  )
+  );
+
+  function handleDragEnd(event: any) {
+    console.log('Drag and called');
+    
+  }
+
 }

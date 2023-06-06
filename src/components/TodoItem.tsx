@@ -7,11 +7,15 @@ import { useAppDispatch } from '../app/hooks';
 import TodoEdit from './TodoEdit';
 import { green, grey, red } from '@mui/material/colors';
 
+import { useSortable } from '@dnd-kit/sortable';
+import { CSS } from "@dnd-kit/utilities";
+
 interface TodoItemProps {
   task: Task;
 }
 
 const TodoItem: React.FC<TodoItemProps> = ({ task }) => {
+  useSortable({id: task.taskId})
   
   const dispatch = useAppDispatch();
 
