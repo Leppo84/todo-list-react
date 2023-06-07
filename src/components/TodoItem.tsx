@@ -42,7 +42,7 @@ const TodoItem: React.FC<TodoItemProps> = ({ task, id }) => {
 
   return (
     <Container>
-        <Stack ref={setNodeRef} direction="row" spacing={2} alignItems='center' justifyContent="space-between" mt={1} useFlexGap
+        <Stack ref={setNodeRef} direction={{xs:"column", md:"row"}} spacing={2} alignItems='center' justifyContent="space-between" mt={1} useFlexGap
         style={style}>
           <Stack direction="row" spacing={2} alignItems='center' justifyContent="space-between" mt={1} p={1}
           onClick={() => toggleStatus(task.taskId)}
@@ -77,6 +77,7 @@ const TodoItem: React.FC<TodoItemProps> = ({ task, id }) => {
             <Button
               variant='contained'
               color='error'
+              fullWidth
               onClick={() => handleDeleteClick(task.taskId)}
               >
               Cancella
