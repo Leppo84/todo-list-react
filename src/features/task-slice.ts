@@ -13,7 +13,7 @@ const emptyList: Task[] = [];
 const storageData: string | null = localStorage.getItem("currentData");      
 const jsonData: Task[] = JSON.parse(storageData!);
 
-let counter = 1;
+let counter: number = Date.now();
 
 export const taskSlice = createSlice({
   name: 'taskManager',
@@ -41,10 +41,13 @@ export const taskSlice = createSlice({
     
     // addTask
     addedTask(state, action: PayloadAction<string>) {
+      if ( !action.payload ) {
+        return state
+      }
       if (!state || state.length < 1) {
         state  = [];
-        counter = 1
-        const newTask: Task = {
+        counter = Date.now();
+          const newTask: Task = {
           taskId: counter,
           completed: false,
           content: action.payload
@@ -53,7 +56,7 @@ export const taskSlice = createSlice({
       return state
       }
       else {
-        counter = state[state.length -1].taskId +1;
+        counter = Date.now();
         const newTask: Task = {
           taskId: counter,
           completed: false,
@@ -66,6 +69,9 @@ export const taskSlice = createSlice({
       
     // modifyTask
     updatedTask(state, action: PayloadAction<{ taskId: number; newContent: string }>) {
+      if ( !action.payload.newContent ) {
+        return state
+      }
       return state.map(task => {
         if (task.taskId === action.payload.taskId) {
           
@@ -83,7 +89,6 @@ export const taskSlice = createSlice({
     
     // toggle done/undone
     toggledStatusTask (state, action: PayloadAction<number>) {
-      console.log(action.payload);
       return state.map(task => {
         let status: boolean = task.completed;
         status = !status
@@ -93,8 +98,13 @@ export const taskSlice = createSlice({
         return task;
       })
     },
+
+    reorderTask (state, action: PayloadAction<Task[]>) {
+      return action.payload
+    }
+
   }
 });
 
-export const { addedTask, savedTask,loadedTask, deletedTask, updatedTask, toggledStatusTask } = taskSlice.actions
+export const { addedTask, savedTask,loadedTask, deletedTask, updatedTask, toggledStatusTask, reorderTask} = taskSlice.actions
 export default taskSlice.reducer

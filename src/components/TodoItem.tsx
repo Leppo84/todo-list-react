@@ -7,15 +7,28 @@ import { useAppDispatch } from '../app/hooks';
 import TodoEdit from './TodoEdit';
 import { green, grey, red } from '@mui/material/colors';
 
-import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from "@dnd-kit/utilities";
+import { useSortable } from '@dnd-kit/sortable';
 
 interface TodoItemProps {
   task: Task;
+  id: number;
 }
 
-const TodoItem: React.FC<TodoItemProps> = ({ task }) => {
-  useSortable({id: task.taskId})
+const TodoItem: React.FC<TodoItemProps> = ({ task, id }) => {
+
+  const { 
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition 
+  } = useSortable({ id: id});
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+  };
   
   const dispatch = useAppDispatch();
 
@@ -28,17 +41,19 @@ const TodoItem: React.FC<TodoItemProps> = ({ task }) => {
   }
 
   return (
-      <Container>
-        <Stack direction="row" spacing={2} alignItems='center' justifyContent="space-between" mt={1} useFlexGap>
+    <Container>
+        <Stack ref={setNodeRef} direction="row" spacing={2} alignItems='center' justifyContent="space-between" mt={1} useFlexGap
+        style={style}>
           <Stack direction="row" spacing={2} alignItems='center' justifyContent="space-between" mt={1} p={1}
-            onClick={() => toggleStatus(task.taskId)}
+          onClick={() => toggleStatus(task.taskId)}
             >
         {task.completed ? (
           <>
             <Chip label="Done!" sx={{boxShadow:1}} variant='outlined'></Chip>
             <CheckCircleOutlineIcon color='success'/> 
             <Paper elevation={1} sx={{py:1, px:3, bgcolor:green[50], color:grey[600]}}
-              >
+              ref={setNodeRef} {...attributes} {...listeners}
+            >
               {task.content}
             </Paper>
           </>
@@ -47,8 +62,9 @@ const TodoItem: React.FC<TodoItemProps> = ({ task }) => {
           
             <Chip label="To do" sx={{boxShadow:3}}></Chip>      
             <HighlightOffIcon color='error'/>
-            <Paper elevation={3} sx={{py:1, px:3, bgcolor:red[50]}}
-              >
+            <Paper elevation={1} sx={{py:1, px:3, bgcolor:red[50]}}
+              ref={setNodeRef} {...attributes} {...listeners}
+            >
               {task.content}
             </Paper>
             </>

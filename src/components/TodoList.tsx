@@ -1,16 +1,17 @@
 import * as React from 'react';
 import { useMemo } from 'react';
 import { useAppDispatch, useAppSelector } from '../app/hooks';
-import { Box, Button, Chip, List, TextField, Typography } from '@mui/material';
+import { Box, Button, Chip, TextField, Typography } from '@mui/material';
 import { useTheme } from '@emotion/react';
-import taskSlice, { Task, loadedTask, addedTask, savedTask, updatedTask } from '../features/task-slice';
+import { Task, loadedTask, addedTask, savedTask, updatedTask, reorderTask } from '../features/task-slice';
 import TodoItem from './TodoItem';
 import TodoEmpty from './TodoEmpty';
 import isEqual from 'lodash.isequal';
 
 import { DndContext, closestCenter } from '@dnd-kit/core';
 import { arrayMove, SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
-import { useState } from 'react';
+import { CSS } from '@dnd-kit/utilities'
+import { restrictToWindowEdges } from '@dnd-kit/modifiers';
 
 export const TodoList = () => {
   const theme = useTheme();
@@ -22,7 +23,7 @@ export const TodoList = () => {
   // HANDLER FOR A NEW NOTE
   
   const [editTaskId, setEditTaskId] = React.useState<number | null>(null);
-  const [content, setContent] = React.useState('');
+  const [content, setContent] = React.useState("");
   
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     handleFormSubmit(e);
@@ -47,14 +48,13 @@ export const TodoList = () => {
 
   const saveTask = (() => {
     dispatch(savedTask());
-    console.log('Pigiato u buttun');
     dispatch(loadedTask());
   }); 
   
   // catch for local storage date
 
   const storageData: string | null = localStorage.getItem("currentData");      
-  const jsonData: Task[] = JSON.parse(storageData!);
+  let jsonData: Task[] = JSON.parse(storageData!);
   
   // trigger for save alert on button
 
@@ -64,15 +64,27 @@ export const TodoList = () => {
 
   const loadTask = (() => {
     dispatch(loadedTask());
-    console.log("Pigiato l'altro  buttun");
   }); 
+    
+    // DRAG & DROP FEATURE
 
-  // DRAG & DROP FEATURE
+    const itemIds = useMemo(() => tasks.map((task) => task.taskId), [tasks]);
 
-  const [ order, setOrder ] = useState(tasks);
-  
-
-  
+    function handleDragEnd(event: any) {
+      console.log("evento chiamato");
+      const { active, over } = event;
+      console.log(event);
+      if (over && active.id !== over.id) {
+        const activeIndex = itemIds.indexOf(active.id);
+        const overIndex = itemIds.indexOf(over.id);
+        console.log(
+          arrayMove(tasks, activeIndex, overIndex)
+        );
+        let newOrder = arrayMove(tasks, activeIndex, overIndex);
+        dispatch(reorderTask(newOrder))
+        }
+    };
+   
   return (
     <Box bgcolor={'white'} borderRadius={5} py={3} px={6} mt={2} sx={{boxShadow:8}}>
           <Typography variant='h3'>Cose da fare:</Typography>
@@ -80,22 +92,26 @@ export const TodoList = () => {
           <DndContext
             collisionDetection={closestCenter}
             onDragEnd={handleDragEnd}
+            // modifiers={[restrictToVerticalAxis]}
+            modifiers={[restrictToWindowEdges]}
           >
-            {/* <SortableContext
-              // items = {order.taskId}
+            <SortableContext
+              // items = {data.map((task) => task.taskId)}
+              items = {itemIds}
               strategy={verticalListSortingStrategy}
-            > */}
-              {tasks && tasks.length > 0 ? (
-                tasks.map((task: Task) => (
-                  <TodoItem
+              // strategy={rectSwappingStrategy}
+            >
+            {tasks && tasks.length > 0 ? (
+              tasks.map((task) => (
+                <TodoItem
                   key={task.taskId}
                   task={task}
-                  />
-                  ))
-              ):(
+                  id={task.taskId}
+                />
+              ))):(
                 <TodoEmpty/>
               )}
-            {/* </SortableContext> */}
+            </SortableContext>
           </DndContext>
           <hr />
           <br />
@@ -111,7 +127,7 @@ export const TodoList = () => {
               value={content}
               onChange={handleContentChange}
               />
-            <Button variant='contained'sx={{mx:2}} id="active" type="submit">
+            <Button variant='contained'sx={{mx:2}} type="submit">
               Aggiungi nuova nota
             </Button>
             <Chip label='Carica i dati precedentemente salvati' sx={{mx:2}} color='primary'
@@ -130,10 +146,5 @@ export const TodoList = () => {
           </form> }
         </Box>
   );
-
-  function handleDragEnd(event: any) {
-    console.log('Drag and called');
-    
-  }
 
 }
