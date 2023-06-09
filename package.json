@@ -59,6 +59,7 @@
     ]
   },
   "devDependencies": {
+    "@iconify/react": "^4.1.0",
     "@types/lodash.isequal": "^4.5.6"
   }
 }

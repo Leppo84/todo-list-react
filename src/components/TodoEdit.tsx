@@ -5,15 +5,17 @@ import { updatedTask, addedTask, Task } from '../features/task-slice';
 
 interface TodoEditProps {
   task: Task;
+    setEditTaskId: any;
+
 }
 
-const TodoEdit: React.FC<TodoEditProps> = ({ task }) => {
+const TodoEdit: React.FC<TodoEditProps> = ({ task, setEditTaskId }) => {
 
   const dispatch = useAppDispatch();
 
-  const [content, setContent] = React.useState('');
+  const [content, setContent] = React.useState(task.content);
 
-  const [editTaskId, setEditTaskId] = React.useState<number | null>(null);
+
 
   const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -27,7 +29,7 @@ const TodoEdit: React.FC<TodoEditProps> = ({ task }) => {
   };
   
   const handleEditClick = (taskId: number) => {
-    setEditTaskId(taskId);
+    // setEditTaskId(taskId);
     setContent(task.content);
   };
 
@@ -36,32 +38,20 @@ const TodoEdit: React.FC<TodoEditProps> = ({ task }) => {
   };
 
   return (
-    <>
-      {editTaskId === task.taskId ? (
-        <form onSubmit={handleFormSubmit}>
-          <TextField 
-            hiddenLabel
-            id="filled-hidden-label-small"
-            defaultValue="Small"
-            variant="filled"
-            size="small"
-            type="text"
-            placeholder="Modifica il task"
-            value={content}
-            onChange={handleContentChange}
-          />
-          <Button variant='contained' sx={{mx:2}} type="submit">Salva</Button>
-        </form>
-      ) : (
-        <Button 
-        variant='outlined'
-        color='secondary'
-        sx={{':hover': {bgcolor: 'darkblue', color:'white'}}} onClick={() => handleEditClick(task.taskId)}
-        >
-        Modifica
-        </Button>
-      )}
-    </>
+    <form onSubmit={handleFormSubmit}>
+      <TextField 
+        hiddenLabel
+        id="filled-hidden-label-small"
+        defaultValue="Small"
+        variant="filled"
+        size="small"
+        type="text"
+        placeholder="Modifica il task"
+        value={content}
+        onChange={handleContentChange}
+      />
+      <Button variant='contained' sx={{mx:2}} type="submit">Salva</Button>
+    </form>
   )
 }
 

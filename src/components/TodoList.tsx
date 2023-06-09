@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useMemo } from 'react';
 import { useAppDispatch, useAppSelector } from '../app/hooks';
-import { Box, Button, Chip, TextField, Typography } from '@mui/material';
+import { Box, Button, Chip, Divider, TextField, Typography } from '@mui/material';
 import { useTheme } from '@emotion/react';
 import { Task, loadedTask, addedTask, savedTask, updatedTask, reorderTask } from '../features/task-slice';
 import TodoItem from './TodoItem';
@@ -86,9 +86,8 @@ export const TodoList = () => {
     };
    
   return (
-    <Box bgcolor={'white'} borderRadius={5} py={3} px={6} mt={2} sx={{boxShadow:8}}>
-      <Typography variant='h3'>Cose da fare:</Typography>
-      <hr />
+    <Box bgcolor={'white'} borderRadius={5} py={3} px={0} mt={2} sx={{boxShadow:8}}>
+      <Typography variant='h4'>Cose da fare:</Typography>
       <DndContext
         collisionDetection={closestCenter}
         onDragEnd={handleDragEnd}
@@ -101,20 +100,22 @@ export const TodoList = () => {
           strategy={verticalListSortingStrategy}
           // strategy={rectSwappingStrategy}
         >
+          <Divider/>
         {tasks && tasks.length > 0 ? (
           tasks.map((task) => (
+            <>
             <TodoItem
               key={task.taskId}
               task={task}
               id={task.taskId}
-            />
+              />
+              <Divider/>
+            </>
           ))):(
             <TodoEmpty/>
           )}
         </SortableContext>
       </DndContext>
-      <hr />
-      <br />
         {editTaskId !== null ? null : 
       <form onSubmit={handleSubmit}>
         <TextField hiddenLabel

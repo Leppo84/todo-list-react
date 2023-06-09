@@ -1,16 +1,16 @@
 import * as React from 'react';
-import { Button, Chip, Container, Paper, Stack, useTheme } from '@mui/material';
+import { Button, Chip, Container, IconButton, Paper, Stack, TextField, useTheme } from '@mui/material';
 import { Task, deletedTask, toggledStatusTask } from '../features/task-slice';
-import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
-import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import { useAppDispatch } from '../app/hooks';
 import TodoEdit from './TodoEdit';
-import { green, grey, red } from '@mui/material/colors';
+import { blue, green, grey, red } from '@mui/material/colors';
 import DeleteIcon from '@mui/icons-material/Delete';
 
 import { CSS } from "@dnd-kit/utilities";
 import { useSortable } from '@dnd-kit/sortable';
 import DragIndicatorIcon from '@mui/icons-material/DragIndicator';
+
+import { Icon, InlineIcon} from '@iconify/react';
 
 interface TodoItemProps {
   task: Task;
@@ -22,6 +22,8 @@ const TodoItem: React.FC<TodoItemProps> = ({ task, id }) => {
   // STYLE SETTINGS
 
   let contentLenght: number = task.content.length
+
+  let whileEdit:boolean = false;
 
   // ... to do ;) 
 
@@ -46,7 +48,17 @@ const TodoItem: React.FC<TodoItemProps> = ({ task, id }) => {
   
   // REDUX ACTIONS
 
+  
   const dispatch = useAppDispatch();
+  
+  const [editTaskId, setEditTaskId] = React.useState<number | null>(null);
+
+  const [content, setContent] = React.useState('');
+
+  const handleEditClick = (taskId: number) => {
+    setEditTaskId(taskId);
+    // setContent(task.content);
+  };
 
   const handleDeleteClick = (taskId: number) => {
     dispatch(deletedTask(taskId));
@@ -59,31 +71,41 @@ const TodoItem: React.FC<TodoItemProps> = ({ task, id }) => {
 return (
     <Container>
 
-        <Stack direction={{xs:"column", md:"row"}} spacing={2} alignItems='center' justifyContent="space-between" mt={1} useFlexGap
+        <Stack  direction={"row"} spacing={2} alignItems='center' justifyContent="space-between" mt={1}
         style={style}>
-          <Stack direction="row" spacing={2} alignItems='center' justifyContent="space-between" mt={1} p={1}
-          onClick={() => toggleStatus(task.taskId)}
-          >
-            <Paper elevation={task.completed ? 3 : 1}  sx={{py:1, px:3, bgcolor:task.completed ? green[50] : red[50], color:grey[600]}}
-              // ref={setNodeRef} {...attributes} {...listeners}
+          <Stack useFlexGap direction="row" spacing={1.5} flexGrow={8} alignItems='center' justifyContent="space-between" pb={1}>
+            <IconButton size="large"
+              ref={setNodeRef} {...attributes} {...listeners}>
+              <Icon icon="mdi:drag"/>
+            </IconButton>
+            {editTaskId === task.taskId ? (""):(
+<>
+            <Paper component={whileEdit ? TextField : Paper} elevation={task.completed ? 1 : 3} sx={{py:1, px:2, bgcolor:task.completed ? green[50] : red[50], color:task.completed ? grey[500] : grey[900], width: "75%", textAlign: "start"}} 
             >
-              {showMore || contentLenght < 100 ? task.content : `${task.content.substring(0,100)}...`}
-            {contentLenght > 100 ? (
-              <Button onClick={() => setShowMore(!showMore)}>{showMore ? "show less" : "Show more"}</Button>
+
+              {showMore || contentLenght < 100 ? task.content : `${task.content.substring(0,70)}...`}
+            {contentLenght > 70 ? (
+              <Button color={"info"} onClick={() => setShowMore(!showMore)}>{showMore ? "show less" : "Show more"}</Button>
               ) : ( ""
-                )}
+              )}
             </Paper>
-            {task.completed ? (
-              <CheckCircleOutlineIcon color={task.completed ? ("success"):("error")}/> 
-              ) : (
-                <HighlightOffIcon color='error'/>
-                )}
-                <Chip label={task.completed ? ("Done!") : ("To do")} sx={{boxShadow:1}} variant={task.completed ? ("outlined") : ("filled")}/>
+              <Chip label={task.completed ? ("Done!") : ("To do")} sx={{boxShadow: task.completed ? 0 : 4}} variant={task.completed ? ("outlined") : ("filled")}
+              onClick={() => toggleStatus(task.taskId)}/>
+              </>
+            )}
+
           </Stack>
           <Stack direction="row" spacing={2} alignItems='center' justifyContent="space-between" mt={1}>
-            <TodoEdit
-              task={task}
-              />
+            {editTaskId === task.taskId ? (
+              <TodoEdit task={task} setEditTaskId={setEditTaskId}/>
+            ) : (
+              <Button 
+               variant='outlined' color='secondary' sx={{':hover': {bgcolor: 'darkblue', color:'white'}}}
+               onClick={() => handleEditClick(task.taskId)}
+              >
+                Modifica
+              </Button>
+            )}
             <Button
               variant='contained'
               color='error'
