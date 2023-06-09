@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Button, Chip, Container, IconButton, Paper, Stack, TextField, useTheme } from '@mui/material';
+import { Button, Chip, Container, IconButton, Paper, Stack, TextField, paperClasses, useTheme } from '@mui/material';
 import { Task, deletedTask, toggledStatusTask } from '../features/task-slice';
 import { useAppDispatch } from '../app/hooks';
 import TodoEdit from './TodoEdit';
@@ -71,54 +71,61 @@ const TodoItem: React.FC<TodoItemProps> = ({ task, id }) => {
 return (
     <Container>
 
-        <Stack  direction={"row"} spacing={2} alignItems='center' justifyContent="space-between" mt={1}
+        <Stack  direction={{xs:"column",sm:"row"}} spacing={{xs:0,sm:2}} alignItems={{xs: 'stretch',sm:'center'}} justifyContent="space-between" mt={0}
         style={style}>
-          <Stack useFlexGap direction="row" spacing={1.5} flexGrow={8} alignItems='center' justifyContent="space-between" pb={1}>
+          <Stack direction="row" spacing={1.5} flexGrow={3} alignItems='center' justifyContent="center">
             <IconButton size="large"
               ref={setNodeRef} {...attributes} {...listeners}>
               <Icon icon="mdi:drag"/>
+              {/* <Icon icon="fluent:arrow-fit-16-filled" rotate={1} /> */}
             </IconButton>
             {editTaskId === task.taskId ? (""):(
-<>
-            <Paper component={whileEdit ? TextField : Paper} elevation={task.completed ? 1 : 3} sx={{py:1, px:2, bgcolor:task.completed ? green[50] : red[50], color:task.completed ? grey[500] : grey[900], width: "75%", textAlign: "start"}} 
-            >
-
-              {showMore || contentLenght < 100 ? task.content : `${task.content.substring(0,70)}...`}
-            {contentLenght > 70 ? (
-              <Button color={"info"} onClick={() => setShowMore(!showMore)}>{showMore ? "show less" : "Show more"}</Button>
-              ) : ( ""
-              )}
-            </Paper>
+              <>
+                <Paper elevation={task.completed ? 1 : 3} 
+                  sx={{py:1, px:2, bgcolor:task.completed ? green[50] : red[50], color:task.completed ? grey[500] : grey[900], width: "100%", textAlign: "start"}} 
+                >
+                {showMore || contentLenght < 100 ? task.content : `${task.content.substring(0,70)}...`}
+              {contentLenght > 70 ? (
+                <Button color={"info"} onClick={() => setShowMore(!showMore)}>{showMore ? "show less" : "Show more"}</Button>
+                ) : ( ""
+                )}
+              </Paper>
               <Chip label={task.completed ? ("Done!") : ("To do")} sx={{boxShadow: task.completed ? 0 : 4}} variant={task.completed ? ("outlined") : ("filled")}
               onClick={() => toggleStatus(task.taskId)}/>
               </>
             )}
 
           </Stack>
-          <Stack direction="row" spacing={2} alignItems='center' justifyContent="space-between" mt={1}>
+          <Stack direction="row" spacing={2} alignItems='center' justifyContent={{xs: "end" , sm:"space-between"}} flexGrow={0}>
             {editTaskId === task.taskId ? (
               <TodoEdit task={task} setEditTaskId={setEditTaskId}/>
             ) : (
-              <Button 
-               variant='outlined' color='secondary' sx={{':hover': {bgcolor: 'darkblue', color:'white'}}}
-               onClick={() => handleEditClick(task.taskId)}
+              <>
+              <IconButton sx={{display: {sm:"block",md:"none"}}}
+                onClick={() => handleEditClick(task.taskId)}
               >
-                Modifica
-              </Button>
+                <Icon icon="iconamoon:edit-fill" />
+
+              </IconButton>
+                <Button variant='outlined' color='secondary'
+                  sx={{':hover': {bgcolor: 'darkblue', color:'white'}, display: {xs:"none", sm:"none", md:"block"}}}
+                  onClick={() => handleEditClick(task.taskId)}
+                >
+                  Modifica
+                </Button>
+              </>
             )}
+            <IconButton 
+              color='error'
+
+              sx={{display: {sm:"block",md:"none"}}}
+              onClick={() => handleDeleteClick(task.taskId)}>
+            <DeleteIcon/>
+            </IconButton>
             <Button
               variant='contained'
               color='error'
-              startIcon={<DeleteIcon/>}
-              fullWidth
-              sx={{display: {xs:"block",sm:"none"}}}
-              onClick={() => handleDeleteClick(task.taskId)}
-              >
-            </Button>
-            <Button
-              variant='contained'
-              color='error'
-              sx={{display: {xs:"none",sm:"block"}}}
+              sx={{display: {xs:"none", sm:"none", md:"block"}}}
               onClick={() => handleDeleteClick(task.taskId)}
               >
               Cancella
