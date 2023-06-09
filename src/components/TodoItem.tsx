@@ -21,6 +21,8 @@ const TodoItem: React.FC<TodoItemProps> = ({ task, id }) => {
 
   // STYLE SETTINGS
 
+  let contentLenght: number = task.content.length
+
   // ... to do ;) 
 
   // TOGGLE SHOW MORE / SHOW LESS
@@ -65,8 +67,11 @@ return (
             <Paper elevation={task.completed ? 3 : 1}  sx={{py:1, px:3, bgcolor:task.completed ? green[50] : red[50], color:grey[600]}}
               // ref={setNodeRef} {...attributes} {...listeners}
             >
-              {showMore ? task.content : `${task.content.substring(0,100)}...`}
+              {showMore || contentLenght < 100 ? task.content : `${task.content.substring(0,100)}...`}
+            {contentLenght > 100 ? (
               <Button onClick={() => setShowMore(!showMore)}>{showMore ? "show less" : "Show more"}</Button>
+              ) : ( ""
+                )}
             </Paper>
             {task.completed ? (
               <CheckCircleOutlineIcon color={task.completed ? ("success"):("error")}/> 
