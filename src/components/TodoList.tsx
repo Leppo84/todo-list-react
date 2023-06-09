@@ -87,64 +87,64 @@ export const TodoList = () => {
    
   return (
     <Box bgcolor={'white'} borderRadius={5} py={3} px={6} mt={2} sx={{boxShadow:8}}>
-          <Typography variant='h3'>Cose da fare:</Typography>
-          <hr />
-          <DndContext
-            collisionDetection={closestCenter}
-            onDragEnd={handleDragEnd}
-            // modifiers={[restrictToVerticalAxis]}
-            modifiers={[restrictToWindowEdges]}
-          >
-            <SortableContext
-              // items = {data.map((task) => task.taskId)}
-              items = {itemIds}
-              strategy={verticalListSortingStrategy}
-              // strategy={rectSwappingStrategy}
-            >
-            {tasks && tasks.length > 0 ? (
-              tasks.map((task) => (
-                <TodoItem
-                  key={task.taskId}
-                  task={task}
-                  id={task.taskId}
-                />
-              ))):(
-                <TodoEmpty/>
-              )}
-            </SortableContext>
-          </DndContext>
-          <hr />
-          <br />
-            {editTaskId !== null ? null : 
-          <form onSubmit={handleSubmit}>
-            <TextField hiddenLabel
-              variant="filled"
-              id="filled-hidden-label-small"
-              defaultValue="Small"
-              size="small"
-              type="text"
-              placeholder="Inserisci una nota"
-              value={content}
-              onChange={handleContentChange}
-              />
-            <Button variant='contained'sx={{mx:2}} type="submit">
-              Aggiungi nuova nota
-            </Button>
-            <Chip label='Carica i dati precedentemente salvati' sx={{mx:2}} color='primary'
+      <Typography variant='h3'>Cose da fare:</Typography>
+      <hr />
+      <DndContext
+        collisionDetection={closestCenter}
+        onDragEnd={handleDragEnd}
+        // modifiers={[restrictToVerticalAxis]}
+        modifiers={[restrictToWindowEdges]}
+      >
+        <SortableContext
+          // items = {data.map((task) => task.taskId)}
+          items = {itemIds}
+          strategy={verticalListSortingStrategy}
+          // strategy={rectSwappingStrategy}
+        >
+        {tasks && tasks.length > 0 ? (
+          tasks.map((task) => (
+            <TodoItem
+              key={task.taskId}
+              task={task}
+              id={task.taskId}
+            />
+          ))):(
+            <TodoEmpty/>
+          )}
+        </SortableContext>
+      </DndContext>
+      <hr />
+      <br />
+        {editTaskId !== null ? null : 
+      <form onSubmit={handleSubmit}>
+        <TextField hiddenLabel
+          variant="filled"
+          id="filled-hidden-label-small"
+          defaultValue="Small"
+          size="small"
+          type="text"
+          placeholder="Inserisci una nota"
+          value={content}
+          onChange={handleContentChange}
+          />
+        <Button variant='contained'sx={{mx:2}} type="submit">
+          Aggiungi nuova nota
+        </Button>
+        <Chip label='Carica i dati precedentemente salvati' sx={{mx:2}} color='primary'
 
-             onClick={loadTask}
-           />
-            {saveSync ? (
-            <Chip label='Dati salvati' sx={{mx:2}}
-              onClick={saveTask}
-            />
-            ) : (
-              <Chip label='Salva i dati in locale!' sx={{mx:2}} color='secondary'
-              onClick={saveTask}
-            />
-            )}
-          </form> }
-        </Box>
+          onClick={loadTask}
+        />
+        {saveSync ? (
+        <Chip label='Dati salvati' sx={{mx:2}}
+          onClick={saveTask}
+        />
+        ) : (
+          <Chip label='Salva i dati in locale!' sx={{mx:2}} color='secondary'
+          onClick={saveTask}
+        />
+        )}
+      </form> }
+    </Box>
   );
 
 }
