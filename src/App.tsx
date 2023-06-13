@@ -16,7 +16,7 @@ function App() {
       <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons"/>
       <Box bgcolor={'lightgrey'} minHeight={'92vh'}>
         <Header/>
-        <Container>
+        <Container maxWidth="lg">
           <TodoList/>
         </Container>
       </Box>

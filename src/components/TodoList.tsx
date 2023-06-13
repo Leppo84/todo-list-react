@@ -12,6 +12,7 @@ import { DndContext, closestCenter } from '@dnd-kit/core';
 import { arrayMove, SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities'
 import { restrictToWindowEdges } from '@dnd-kit/modifiers';
+import { grey } from '@mui/material/colors';
 
 export const TodoList = () => {
   const theme = useTheme();
@@ -95,10 +96,8 @@ export const TodoList = () => {
         modifiers={[restrictToWindowEdges]}
       >
         <SortableContext
-          // items = {data.map((task) => task.taskId)}
           items = {itemIds}
           strategy={verticalListSortingStrategy}
-          // strategy={rectSwappingStrategy}
         >
           <Divider/>
         {tasks && tasks.length > 0 ? (
@@ -107,7 +106,6 @@ export const TodoList = () => {
             <TodoItem
               key={task.taskId}
               task={task}
-              id={task.taskId}
               />
               <Divider/>
             </>
@@ -131,20 +129,15 @@ export const TodoList = () => {
         <Button variant='contained'sx={{mx:2}} type="submit">
           Aggiungi nuova nota
         </Button>
-        <Chip label='Carica i dati precedentemente salvati' sx={{mx:2}} color='primary'
-
+      </form> }
+        <Chip label='Carica i dati precedentemente salvati' sx={{mx:2}}
           onClick={loadTask}
         />
-        {saveSync ? (
-        <Chip label='Dati salvati' sx={{mx:2}}
+        <Chip 
+          label={saveSync? 'Dati salvati': 'Salva i dati in locale!'} 
+          color={saveSync ? undefined : 'success'} sx={{mx:2}}
           onClick={saveTask}
         />
-        ) : (
-          <Chip label='Salva i dati in locale!' sx={{mx:2}} color='secondary'
-          onClick={saveTask}
-        />
-        )}
-      </form> }
     </Box>
   );
 
